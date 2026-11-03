@@ -1,25 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Globalization;
+using KontoNaMonety;
 
-
-namespace KontoBankowe
+namespace KontoNaMonety
 {
     internal class Automat
     {
-
+        private readonly decimal[] PrzyjmowaneMonety = { 0.5m, 1m, 2m, 5m, 0.20m, 0.10m };
         private int _iloscMonet;
 
-        public void WrzucMonete(KontoBankowe konto, decimal wartoscMonety)
+        public void Wrzucmonete(string wartoscMonety, KontoBankowe konto)
         {
+            bool czyPoprawna = decimal.TryParse(wartoscMonety, CultureInfo.InvariantCulture, out decimal wartosc);
 
+            if (!czyPoprawna)
+            {
+                Console.WriteLine("Nieprawidłowa wartość monety.");
+                return;
+            }
 
+            foreach (decimal nominal in PrzyjmowaneMonety)
+            {
+                if (wartosc == nominal)
+                {
+                    konto.Wplac(nominal);
+                    _iloscMonet++;
+                    return;
+                }
+            }
 
-
-
-            konto.Saldo += wartoscMonety;
+            Console.WriteLine("Nieprawidłowa moneta.");
         }
-
-
     }
 }

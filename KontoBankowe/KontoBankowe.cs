@@ -2,18 +2,28 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KontoBankowe
+namespace KontoNaMonety
 {
     internal class KontoBankowe
     {
-        private decimal _saldo;
+        public static int licznikKont = 0;
 
+
+
+        private decimal _saldo = 0m;
         private string _numer;
 
-        public decimal Saldo
+        public decimal StanKonta()
         {
-            get { return _saldo; }
-            set { _saldo = value; }
+            return _saldo;
+        }
+
+        public void Wplac(decimal kwota)
+        {
+            if (kwota > 0)
+            {
+                _saldo += kwota;
+            }
         }
     }
 }
