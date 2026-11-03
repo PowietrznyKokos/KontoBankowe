@@ -1,17 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace KontoNaMonety
 {
     internal class KontoBankowe
     {
-        public static int licznikKont = 0;
+        private static int licznikKont = 0;
 
+        private decimal _saldo = 0;
+        private int _numer;
 
+        public int Numer
+        {
+            get { return _numer; }
+        }
 
-        private decimal _saldo = 0m;
-        private string _numer;
+        public KontoBankowe()
+        {
+            licznikKont++;
+            _numer = licznikKont;
+        }
 
         public decimal StanKonta()
         {
@@ -22,7 +29,7 @@ namespace KontoNaMonety
         {
             if (kwota > 0)
             {
-                _saldo += kwota;
+                _saldo = _saldo + kwota;
             }
         }
     }

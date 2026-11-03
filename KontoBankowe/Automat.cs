@@ -1,35 +1,49 @@
 ﻿using System;
 using System.Globalization;
-using KontoNaMonety;
 
 namespace KontoNaMonety
 {
     internal class Automat
     {
-        private readonly decimal[] PrzyjmowaneMonety = { 0.5m, 1m, 2m, 5m, 0.20m, 0.10m };
-        private int _iloscMonet;
+        private decimal[] nominaly = { 1, 2, 5};
+        private int[] ilosci = new int[3];
 
-        public void Wrzucmonete(string wartoscMonety, KontoBankowe konto)
+        public void Wrzucmonete(string tekst, KontoBankowe konto)
         {
-            bool czyPoprawna = decimal.TryParse(wartoscMonety, CultureInfo.InvariantCulture, out decimal wartosc);
+            decimal wartosc;
+            bool czyLiczba = decimal.TryParse(tekst, out wartosc);
 
-            if (!czyPoprawna)
+            if (!czyLiczba)
             {
-                Console.WriteLine("Nieprawidłowa wartość monety.");
+                Console.WriteLine("Nieudany odczyt: " + tekst);
                 return;
             }
 
-            foreach (decimal nominal in PrzyjmowaneMonety)
+            for (int i = 0; i < nominaly.Length; i++)
             {
-                if (wartosc == nominal)
+                if (wartosc == nominaly[i])
                 {
-                    konto.Wplac(nominal);
-                    _iloscMonet++;
+                    konto.Wplac(wartosc);
+                    ilosci[i]++;
+                    Console.WriteLine("Moneta przyjęta: " + wartosc + " zł");
                     return;
                 }
             }
 
-            Console.WriteLine("Nieprawidłowa moneta.");
+            Console.WriteLine("Zła moneta: " + tekst);
+        }
+
+        public void PokazMonety()
+        {
+            decimal suma = 0;
+
+            for (int i = 0; i < nominaly.Length; i++)
+            {
+                Console.WriteLine(nominaly[i] + " zł: " + ilosci[i] + " szt.");
+                suma = suma + nominaly[i] * ilosci[i];
+            }
+
+            Console.WriteLine("Łączna wartość monet: " + suma + " zł");
         }
     }
 }
