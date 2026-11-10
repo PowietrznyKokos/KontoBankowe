@@ -1,36 +1,50 @@
-﻿using System;
+﻿using System.Globalization;
 
-namespace KontoNaMonety
+namespace automat
 {
-    internal class KontoBankowe
+    class KontoBankowe
     {
-        private static int licznikKont = 0;
+        private static int numer = 0;
+        private double stanKonta = 0;
+        public int id = 0;
 
-        private decimal _saldo = 0;
-        private int _numer;
-
-        public int Numer
-        {
-            get { return _numer; }
-        }
+        public List<double> historiaWplat = new List<double>();
 
         public KontoBankowe()
         {
-            licznikKont++;
-            _numer = licznikKont;
+            numer++;
+            id = numer;
         }
 
-        public decimal StanKonta()
+        public void Wplac(double kwota)
         {
-            return _saldo;
+            stanKonta += kwota;
+            dodajDoHistorii(kwota);
+
         }
 
-        public void Wplac(decimal kwota)
+        public double StanKonta()
         {
-            if (kwota > 0)
+            return stanKonta;
+        }
+
+        public void dodajDoHistorii(double wplata)
+        {
+            historiaWplat.Add(wplata);
+        }
+
+        public void pokazHistorie()
+        {
+            Console.Write("\nWplat bylo: " + historiaWplat.Count);
+            Console.Write("\nWplaty: ");
+            for (int i = 0; i < historiaWplat.Count; i++)
             {
-                _saldo = _saldo + kwota;
+                Console.Write(historiaWplat[i] + ", ");
             }
+            Console.Write("\n");
         }
+
+
     }
 }
+    

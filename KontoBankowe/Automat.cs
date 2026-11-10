@@ -1,51 +1,88 @@
-﻿using System;
+﻿using automat;
 using System.Globalization;
 
-namespace KontoNaMonety
+class Automat
 {
-    internal class Automat
+    private List<double> monety = new List<double>();
+    private double[] nominaly = [5, 2, 1, 0.5, 0.2, 0.1];
+    private int[] pojemosc = [10, 5, 3, 5, 5, 5];
+    private int[] iloscMonet = [0, 0, 0, 0, 0, 0];
+
+    public void WrzucMonete(string tekst)
     {
-        private decimal[] nominaly = { 1, 2, 5};
-        private int[] ilosci = new int[3];
-
-        public void Wrzucmonete(string tekst, KontoBankowe konto)
+        string[] czesci = tekst.Split(" ");
+        for (int i = 0; i < czesci.Length; i++)
         {
-            decimal wartosc;
-            bool czyLiczba = decimal.TryParse(tekst, out wartosc);
-
-            if (!czyLiczba)
+            double wartoscMonety = 0;
+            if (double.TryParse(czesci[i], NumberStyles.Float, CultureInfo.InvariantCulture, out wartoscMonety))
             {
-                Console.WriteLine("Nieudany odczyt: " + tekst);
-                return;
-            }
-
-            for (int i = 0; i < nominaly.Length; i++)
-            {
-                if (wartosc == nominaly[i])
+                bool czyPrzyjmuje = false;
+                for (int j = 0; j < nominaly.Length; j++)
                 {
-                    konto.Wplac(wartosc);
-                    ilosci[i]++;
-                    Console.WriteLine("Moneta przyjęta: " + wartosc + " zł");
-                    return;
+                    if (nominaly[j] == wartoscMonety)
+                    {
+                        czyPrzyjmuje = true;
+                        break;
+                    }
                 }
+                if (czyPrzyjmuje)
+                {
+                    if (iloscMonet[Array.IndexOf(nominaly, wartoscMonety)] == pojemosc[Array.IndexOf(nominaly, wartoscMonety)])
+                    {
+                        Console.WriteLine("Skonczylo sie miejsce na monete: " + wartoscMonety);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Moneta przyjęta: " + wartoscMonety + " zł");
+                        monety.Add(wartoscMonety);
+                        iloscMonet[Array.IndexOf(nominaly, wartoscMonety)]++;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Zła moneta: " + wartoscMonety);
+                }
+
             }
-
-            Console.WriteLine("Zła moneta: " + tekst);
-        }
-
-        public void PokazMonety()
-        {
-            decimal suma = 0;
-
-            for (int i = 0; i < nominaly.Length; i++)
+            else
             {
-                Console.WriteLine(nominaly[i] + " zł: " + ilosci[i] + " szt.");
-                suma = suma + nominaly[i] * ilosci[i];
+                Console.WriteLine("Zła moneta");
             }
-
-            Console.WriteLine("Łączna wartość monet: " + suma + " zł");
         }
     }
+
+    public void PokazMonety()
+    {
+
+        for (int i = 0; i < nominaly.Length; i++)
+        {
+            Console.Write(nominaly[i] + ": ");
+            int licznik = 0;
+
+            for (int j = 0; j < monety.Count; j++)
+            {
+
+                if (nominaly[i] == monety[j])
+                {
+                    licznik++;
+                }
+            }
+            Console.Write(licznik + ", ");
+        }
+
+
+    }
+    public void Wplac(KontoBankowe konto)
+    {
+        double sum = 0;
+        for (int i = 0; i < monety.Count; i++)
+        {
+            sum += monety[i];
+        }
+        konto.Wplac(sum);
+        monety.Clear();
+
+    }
+
 }
-
-
