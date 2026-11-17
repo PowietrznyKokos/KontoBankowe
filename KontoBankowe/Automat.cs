@@ -85,4 +85,18 @@ class Automat
 
     }
 
+    public void Wyplac(KontoBankowe konto)
+    {
+        double wyplata = 10;
+        if(konto.StanKonta() >= wyplata)
+        {
+            konto.Wplac(wyplata);
+            Console.WriteLine("Wypłacono: " + wyplata + " zł");
+        }
+        else
+        {
+            Console.WriteLine("Brak środków na koncie");
+        }
+    }
+
 }
