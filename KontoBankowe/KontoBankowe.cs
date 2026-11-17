@@ -23,6 +23,16 @@ namespace automat
 
         }
 
+        public bool Wyplac(double kwota)
+        {
+            if (kwota <= 0 || Math.Round(kwota * 100) > Math.Round(stanKonta * 100))
+            {
+                return false;
+            }
+            stanKonta -= kwota;
+            return true;
+        }
+
         public double StanKonta()
         {
             return stanKonta;

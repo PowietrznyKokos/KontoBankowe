@@ -82,15 +82,14 @@ class Automat
         }
         konto.Wplac(sum);
         monety.Clear();
+        Array.Clear(iloscMonet);
 
     }
 
-    public void Wyplac(KontoBankowe konto)
+    public void Wyplac(KontoBankowe konto, double wyplata)
     {
-        double wyplata = 10;
-        if(konto.StanKonta() >= wyplata)
+        if (konto.Wyplac(wyplata))
         {
-            konto.Wplac(wyplata);
             Console.WriteLine("Wypłacono: " + wyplata + " zł");
         }
         else
